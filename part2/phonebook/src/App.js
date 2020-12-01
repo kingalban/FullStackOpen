@@ -63,14 +63,15 @@ const App = () => {
     personServices.getAll()
       .then(response => {        
         console.log('promise fulfilled')        
-        setPersons(response.concat(
-          {
-            "name": "sneaky dude",
-            "number": "-1",
-            "id": 10
-          }
-        ))      
-      })  
+        setPersons(response
+          // .concat({
+          //           "name": "sneaky dude",
+          //           "number": "-1",
+          //           "id": 10
+          //         })
+          )      
+      })
+      .catch(error => console.log(error))  
     }, 
   [])
 
@@ -126,6 +127,7 @@ const App = () => {
       personServices
         .create(nameObject)
         .then(response => setPersons(persons.concat(response)))
+        .catch(error => console.log(error))
       
 
       setMessage({text:`Added ${newName}`, class:"message"})
@@ -162,7 +164,6 @@ const App = () => {
       personServices
         .deleteItem(person.id)
         .then(response => {
-          console.log("then enacted...", response)
           setPersons(persons.filter(p => p.id !== person.id))
         })
         .catch(error => {
