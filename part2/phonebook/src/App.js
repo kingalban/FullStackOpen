@@ -34,6 +34,18 @@ const Persons = ({personsToShow, persons, handleDelete}) => {
   )
 }
 
+const Message = ({message}) => {
+  if(message === null){
+    return null
+  } 
+
+  return(
+    <div className={message.class}>
+      {message.text}
+    </div>
+    )
+
+}
 
 
 
@@ -42,6 +54,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [ message, setMessage ] = useState(null)
 
   console.log("rerended")
 
@@ -85,7 +98,9 @@ const App = () => {
           .catch(error => {
             console.log(error)
             if(error.response.status === 404){
-              alert(`the person '${newName}' was not found on the server`)
+              // alert(`the person '${newName}' was not found on the server`)
+              setMessage({text:`Information for ${newName} was not found on the server`, class:"error"})
+              setTimeout(() => setMessage(null), 2000)
               setPersons(persons.filter(p => p.name !== newName))
             }
           })
@@ -96,7 +111,9 @@ const App = () => {
       }
 
     } else if (persons.map(person => person.number.toLowerCase()).includes(newNumber.toLowerCase())) {
-      window.alert(`${newNumber} is already in the phonebook`)
+      // window.alert(`${newNumber} is already in the phonebook`)    
+      setMessage({text:`${newName} is already in the phonebook`, class:"error"})
+      setTimeout(() => setMessage(null), 2000)
       setNewNumber('')
 
     } else {
@@ -110,6 +127,11 @@ const App = () => {
         .create(nameObject)
         .then(response => setPersons(persons.concat(response)))
       
+
+      setMessage({text:`Added ${newName}`, class:"message"})
+      setTimeout(() => setMessage(null), 2000)
+
+
       setNewName('')
       setNewNumber('')
       console.log("Contact entered!")
@@ -144,8 +166,11 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== person.id))
         })
         .catch(error => {
-          alert(`the person '${person.name}' was already deleted from server`)
-          setPersons(persons.filter(p => p.id !== person.id))
+          // alert(`the person '${person.name}' was already deleted from server`)
+          setPersons(persons.filter(p => p.id !== person.id))          
+          setMessage({text:`Information for ${newName} has already been removed from the server`, class:"error"})
+          setTimeout(() => setMessage(null), 2000)
+
         })
     }
 
@@ -158,6 +183,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={message}/>
       <Filter filter={filter} 
               handleFilter={handleFilter}/>
       <div>
