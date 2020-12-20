@@ -22,7 +22,7 @@ const dotdotdot = (target, rec = false) => {
 
 // const password = process.argv[2]
 
-const url = process.env.mangodb_url
+const url = process.env.MONGODB_URI
 //`mongodb+srv://phonebook-user:${password}@fullstackopen-phonebook.qc7x0.mongodb.net/phonebook?retryWrites=true&w=majority`
 
 var connected = {value:false}

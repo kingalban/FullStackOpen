@@ -10,5 +10,25 @@ content-type: application/json
   "title": "XKCD",
   "author": "R. Monroe",
   "url": "xkcd.com",
-  "likes": 12
+  "likes": "abjfh"
 }
+
+###
+
+DELETE http://localhost:3003/api/blogs/5fdfd6aff0866733488d2df1 HTTP/1.1
+
+###
+
+PUT http://localhost:3003/api/blogs/5fdfd2f43d0ec552c0f41d75 HTTP/1.1
+content-type: application/json
+
+{
+  "title": "SMBC",
+  "author": "another dude",
+  "url": "smbc...",
+  "likes": -1
+}
+
+###
+
+get http://localhost:3003/api/blogs/5fdfd5918f50ca3e04d298f1 HTTP/1.1

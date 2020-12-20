@@ -5,40 +5,26 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
-
-
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
+const blogsRouter = require('./controllers/blogs')
+const middleware = require('./utils/middleware')
 
 const mongoUrl = config.MONGODB_URI
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+    .then(() => logger.info("Connected to MongoDB"))
+    .catch((error) => {
+        logger.error('error connecting to MongoDB:', error.message)
+    })
 
 app.use(cors())
+
 app.use(express.json())
 
-app.get('/api/blogs', (request, response) => {
-    console.log("gettings")
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})
+app.use(middleware.morgan)
 
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
+app.use('/api/blogs', blogsRouter)
 
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})
+app.use(middleware.unknownEndpoint)
+
+app.use(middleware.errorHandler)
 
 module.exports = app
