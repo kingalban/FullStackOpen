@@ -1,10 +1,14 @@
 
 GET  http://localhost:3003/api/blogs HTTP/1.1
+
+###
+
+POST  http://localhost:3003/api/blogs HTTP/1.1
 content-type: application/json
 
 {
   "title": "XKCD",
   "author": "R. Monroe",
   "url": "xkcd.com",
-  "likes": 10
+  "likes": 12
 }
