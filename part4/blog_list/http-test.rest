@@ -6,16 +6,16 @@ GET  http://localhost:3003/api/blogs HTTP/1.1
 POST  http://localhost:3003/api/blogs HTTP/1.1
 content-type: application/json
 
-{
-  "title": "XKCD",
-  "author": "R. Monroe",
-  "url": "xkcd.com",
-  "likes": "abjfh"
+{  
+    "title": "Go To Statement Considered Harmful",
+    "author": "Edsger W. Dijkstra",
+    "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    "likes": 5
 }
 
 ###
 
-DELETE http://localhost:3003/api/blogs/5fdfd6aff0866733488d2df1 HTTP/1.1
+DELETE http://localhost:3003/api/blogs/5fdfdc88f0866733488d2df4 HTTP/1.1
 
 ###
 
