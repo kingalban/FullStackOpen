@@ -1,4 +1,5 @@
 const supertest = require('supertest')
+const _ = require('lodash')
 const mongoose = require('mongoose')
 const helper = require('./test_helper')
 const app = require('../app')
@@ -36,6 +37,30 @@ describe("api tests", () => {
 
         expect(response.body[0].id).toBeDefined()
         expect(response.body[0]._id).not.toBeDefined()
+    })
+
+    test("POSTing a blog adds it to the server", async () => {
+        const newBlog = {
+            author: "Andrew Healey",
+            title: "Building My Own Chess Engine",
+            url: "https://healeycodes.com/building-my-own-chess-engine/",
+            likes: 2,  
+        }
+
+        await api.post("/api/blogs")
+            .send(newBlog)
+            .expect(200)
+
+        const blogsInDB = await helper.blogsInDB()
+
+        const retunedBlog = _.chain(blogsInDB)
+                            .last()
+                            .pick(_.keys(newBlog))
+                            .value()
+
+        expect(blogsInDB.length).toBe(helper.initialBlogs.length + 1)
+        expect(retunedBlog).toEqual(newBlog)
+
     })
     
 
