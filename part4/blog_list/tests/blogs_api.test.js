@@ -62,7 +62,23 @@ describe("api tests", () => {
         expect(retunedBlog).toEqual(newBlog)
 
     })
-    
+
+    test("likes default to 0", async () => {
+        const newBlog = {
+            author: "Andrew Healey",
+            title: "Building My Own Chess Engine",
+            url: "https://healeycodes.com/building-my-own-chess-engine/",
+        }
+
+        await api.post("/api/blogs")
+            .send(newBlog)
+            .expect(200)
+            
+        const blogsInDB = await helper.blogsInDB()
+
+        expect(_.last(blogsInDB).likes).toBe(0)
+
+    })
 
 })
 
