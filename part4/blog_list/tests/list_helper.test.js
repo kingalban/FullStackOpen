@@ -159,9 +159,9 @@ describe('find by number of likes', () => {
 
     test('Author with most likes, when likes are tied', () => {
         const result = listHelper.mostLikes(blogs.concat({
-                                author: "Michael Chan",
-                                likes: 10,
-                                }))
+            author: "Michael Chan",
+            likes: 10,
+            }))
 
         console.log(result)
         expect(result)
