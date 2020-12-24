@@ -67,7 +67,7 @@ describe("api tests", () => {
         const newBlog = {
             author: "Andrew Healey",
             title: "Building My Own Chess Engine",
-            url: "https://healeycodes.com/building-my-own-chess-engine/",
+            url: "https://healeycodes.com/building-my-own-chess-engine/"
         }
 
         await api.post("/api/blogs")
@@ -78,6 +78,28 @@ describe("api tests", () => {
 
         expect(_.last(blogsInDB).likes).toBe(0)
 
+    })
+
+    test("title is required", async () => {
+        const newBlog = {
+            author: "Andrew Healey",
+            url: "https://healeycodes.com/building-my-own-chess-engine/"
+        }
+
+        await api.post("/api/blogs")
+            .send(newBlog)
+            .expect(400)
+    })
+
+    test("url is required", async () => {
+        const newBlog = {
+            author: "Andrew Healey",
+            title: "Building My Own Chess Engine"
+        }
+
+        await api.post("/api/blogs")
+            .send(newBlog)
+            .expect(400)
     })
 
 })
