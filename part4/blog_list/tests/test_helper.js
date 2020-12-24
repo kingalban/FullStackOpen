@@ -22,11 +22,9 @@ const initialBlogs = [
     }
 ]
 
-const blogsInDB = () => {
-    const dbList = Blog.find({})
-    .then(list => list.toJSON())
-    .catch(error => console.log(error))
-    // .catch(error => console.log(error)
+const blogsInDB = async () => {
+    let dbList = await Blog.find({})
+    return dbList.map(blogs => blogs.toJSON())
 }
 
 

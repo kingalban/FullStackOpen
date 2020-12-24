@@ -30,6 +30,13 @@ describe("api tests", () => {
 
         expect(response.body.length).toBe(helper.initialBlogs.length)
     })
+
+    test("_id has been changed to id", async () => {
+        const response = await api.get('/api/blogs')
+
+        expect(response.body[0].id).toBeDefined()
+        expect(response.body[0]._id).not.toBeDefined()
+    })
     
 
 })
