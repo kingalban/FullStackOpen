@@ -9,16 +9,16 @@ const Blog = require('../models/blog')
 
 // console.log("in DB", helper.initialBlogs)
 
-describe("api tests", () => {
+beforeEach(async () => {
+    await Blog.deleteMany({})
 
-    beforeEach(async () => {
-        await Blog.deleteMany({})
-    
-        const blogObjects = helper.initialBlogs
-          .map(blog => new Blog(blog))
-        const promiseArray = blogObjects.map(blog => blog.save())
-        await Promise.all(promiseArray)
-    })
+    const blogObjects = helper.initialBlogs
+        .map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
+})
+
+describe("receiving from DB", () => {
 
     test("blogs returned with json header", async () => {
         await api.get('/api/blogs')
@@ -38,6 +38,10 @@ describe("api tests", () => {
         expect(response.body[0].id).toBeDefined()
         expect(response.body[0]._id).not.toBeDefined()
     })
+
+})
+
+describe("sending to DB", () => {
 
     test("POSTing a blog adds it to the server", async () => {
         const newBlog = {
@@ -102,6 +106,22 @@ describe("api tests", () => {
             .expect(400)
     })
 
+})
+
+describe("deleting from DB",  () => {
+
+    test("succeed with code 204 if id is valid", async () => {
+        var DBcontent = await helper.blogsInDB()
+        const blogToDelete = DBcontent[0]
+
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+        
+        DBcontent = await helper.blogsInDB()
+
+        expect(DBcontent).not.toContain(blogToDelete)
+    })
 })
 
 afterAll( () => {
