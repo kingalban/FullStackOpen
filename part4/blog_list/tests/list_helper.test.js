@@ -125,7 +125,6 @@ describe("find by number of blogs", () =>{
     test('Author with most blogs, with empty list', () => {
         const result = listHelper.mostBlogs([])
 
-        console.log(result)
         expect(result)
         .toEqual({
             author: undefined,
@@ -138,7 +137,6 @@ describe('find by number of likes', () => {
     test('Author with most likes', () => {
         const result = listHelper.mostLikes(blogs)
 
-        console.log(result)
         expect(result)
         .toEqual({
             author: "Edsger W. Dijkstra",
@@ -149,7 +147,6 @@ describe('find by number of likes', () => {
     test('Author with most likes, when list is empty', () => {
         const result = listHelper.mostLikes([])
 
-        console.log(result)
         expect(result)
         .toEqual({
             author: undefined,
@@ -163,7 +160,6 @@ describe('find by number of likes', () => {
             likes: 10,
             }))
 
-        console.log(result)
         expect(result)
         .toEqual({
             author: "Michael Chan",

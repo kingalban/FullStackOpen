@@ -7,13 +7,11 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-// console.log("in DB", helper.initialBlogs)
-
 beforeEach(async () => {
     await Blog.deleteMany({})
-
+    
     const blogObjects = helper.initialBlogs
-        .map(blog => new Blog(blog))
+    .map(blog => new Blog(blog))
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
 })
@@ -106,6 +104,45 @@ describe("sending to DB", () => {
             .expect(400)
     })
 
+    test("PUT update with whole entry", async () => {
+        const blogToUpdate = (await helper.blogsInDB())[0]
+        const sentBlog = {
+            author: "Andrew Healey",
+            url: "http.com...",
+            title: "Building My Own Chess Engine",
+            likes: 100,
+            id: blogToUpdate.id
+        }
+
+        const updatedBlog = await api.put(`/api/blogs/${blogToUpdate.id}`)
+                        .send(sentBlog)
+                        .expect(200)
+
+        const blogInDB = await api.get(`/api/blogs/${blogToUpdate.id}`)
+                        .expect(200)
+
+        expect(updatedBlog.body).toEqual(sentBlog)
+        expect(blogInDB.body).toEqual(sentBlog)
+
+    })
+
+    test("PUT update likes only", async () => {
+        const blogToUpdate = (await helper.blogsInDB())[0]
+        const sentBlog = {
+            likes: 1
+        }
+
+        const updatedBlog = await api.put(`/api/blogs/${blogToUpdate.id}`)
+                        .send(sentBlog)
+                        .expect(200)
+
+        const blogInDB = await api.get(`/api/blogs/${blogToUpdate.id}`)
+                        .expect(200)
+
+        expect(updatedBlog.body.likes).toEqual(sentBlog.likes)
+
+    })
+
 })
 
 describe("deleting from DB",  () => {
@@ -113,7 +150,8 @@ describe("deleting from DB",  () => {
     test("succeed with code 204 if id is valid", async () => {
         var DBcontent = await helper.blogsInDB()
         const blogToDelete = DBcontent[0]
-
+        
+        console.log(`/api/blogs/${blogToDelete.id}`)
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
             .expect(204)

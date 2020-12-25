@@ -3,7 +3,7 @@ const morgan = require('morgan')
 const logger = require('../utils/logger')
 
 morgan.token("printPOST", (req, res) => {
-  if(req.method === "POST"){
+  if(req.method === "POST" | req.method === "PUT"){
       return JSON.stringify(req.body)
   } 
 })

@@ -2,6 +2,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+require('express-async-errors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
@@ -23,7 +24,9 @@ app.use(cors())
 
 app.use(express.json())
 
-app.use(middleware.morgan)
+if(config.NODE_ENV !== "test"){
+    app.use(middleware.morgan)
+}
 
 app.use('/api/blogs', blogsRouter)
 
