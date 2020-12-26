@@ -1,0 +1,50 @@
+
+GET  http://localhost:3003/api/blogs HTTP/1.1
+
+###
+
+POST  http://localhost:3003/api/blogs HTTP/1.1
+content-type: application/json
+
+{  
+    "title": "Go To Statement Considered Harmful",
+    "author": "Edsger W. Dijkstra",
+    "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    "likes": 5
+}
+
+###
+
+DELETE http://localhost:3003/api/blogs/5fe726b21cc16c2fccd56cfa HTTP/1.1
+
+###
+
+PUT http://localhost:3003/api/blogs/5fdfd2f43d0ec552c0f41d75 HTTP/1.1
+content-type: application/json
+
+{
+  "title": "SMBC",
+  "author": "another dude",
+  "url": "smbc...",
+  "likes": -1
+}
+
+###
+
+GET http://localhost:3003/api/blogs/5fdfd5918f50ca3e04d298f1 HTTP/1.1
+
+
+// USER CONNECTIONS
+### 
+GET http://localhost:3003/api/users HTTP/1.1
+
+###
+POST http://localhost:3003/api/users HTTP/1.1
+content-type: application/json
+
+{
+  "username": "user2",
+  "name": "alfred",
+  "password": "excalibur"
+}
+
