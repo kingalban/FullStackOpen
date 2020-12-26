@@ -119,84 +119,91 @@ const App = () => {
 
     } else {
       
-      const nameObject = {
+    const nameObject = {
         name: newName,
         number: newNumber
-      }
+    }
 
-      personServices
-        .create(nameObject)
-        .then(response => setPersons(persons.concat(response)))
-        .catch(error => console.log(error))
+        personServices
+            .create(nameObject)
+            .then(response => {
+                setPersons(persons.concat(response))
+            
+                setMessage({text:`Added ${newName}`, class:"message"})
+                setTimeout(() => setMessage(null), 2000)
+
+                setNewName('')
+                setNewNumber('')
+                console.log("Contact entered!")            
+            })
+            .catch(error => {              
+                setMessage({text:`${error.response.data.error}`, class:"error"})
+                setTimeout(() => setMessage(null), 2000)
+                console.log(error.response.data)
+            })
       
 
-      setMessage({text:`Added ${newName}`, class:"message"})
-      setTimeout(() => setMessage(null), 2000)
 
 
-      setNewName('')
-      setNewNumber('')
-      console.log("Contact entered!")
     }
-  }
+}
 
-  const handleFilter = (event) => {
+const handleFilter = (event) => {
     console.log(event.target.value)
     setFilter(event.target.value)
-  }
+}
 
-  const handleNewName = (event) => {
+const handleNewName = (event) => {
     console.log(event.target.value)
     console.log("name exists? ", persons.map(p => p.name === event.target.value).includes(true))
     setNewName(event.target.value)  
-  }
+}
 
-  const handleNewNumber = (event) => {
+const handleNewNumber = (event) => {
     console.log(event.target.value)  
     setNewNumber(event.target.value)
-  }
+}
 
-  const deletePerson = (person, persons) => {
+const deletePerson = (person, persons) => {
     if(window.confirm(`Delete ${person.name}`)){
 
-      console.log("delete em!", person)
+        console.log("delete em!", person)
       
-      personServices
-        .deleteItem(person.id)
-        .then(response => {
-          setPersons(persons.filter(p => p.id !== person.id))
-        })
-        .catch(error => {
-          // alert(`the person '${person.name}' was already deleted from server`)
-          setPersons(persons.filter(p => p.id !== person.id))          
-          setMessage({text:`Information for ${newName} has already been removed from the server`, class:"error"})
-          setTimeout(() => setMessage(null), 2000)
-
-        })
+        personServices
+            .deleteItem(person.id)
+            .then(response => {
+            setPersons(persons.filter(p => p.id !== person.id))
+            })
+            .catch(error => {
+                // alert(`the person '${person.name}' was already deleted from server`)
+                setPersons(persons.filter(p => p.id !== person.id))          
+                setMessage({text:`Information for ${newName} has already been removed from the server`, class:"error"})
+                setTimeout(() => setMessage(null), 2000)
+            })
     }
 
-  }
+}
 
-  const personsToShow = persons.filter(
-      person => person.name.toLowerCase().includes(filter.toLowerCase())
-    )
+const personsToShow = persons.filter(
+    person => person.name.toLowerCase().includes(filter.toLowerCase())
+)
 
-  return (
+return (
     <div>
-      <h2>Phonebook</h2>
-      <Message message={message}/>
-      <Filter filter={filter} 
-              handleFilter={handleFilter}/>
-      <div>
-      </div>
-      <h3>Add new</h3>
-      <PersonForm onSubmit={addPerson} 
-                  name={newName} 
-                  nameHandler={handleNewName} 
-                  number={newNumber} 
-                  numHandler={handleNewNumber}/>
-      <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} persons={persons} handleDelete={deletePerson}/>
+        <h2>Phonebook</h2>
+        <Message message={message}/>
+        <Filter filter={filter} 
+                  handleFilter={handleFilter}/>
+    <div>
+    </div>
+        <h3>Add new</h3>
+        <PersonForm onSubmit={addPerson} 
+                    name={newName} 
+                    nameHandler={handleNewName} 
+                    number={newNumber} 
+                    numHandler={handleNewNumber}/>
+        <h3>Numbers</h3>
+        <Persons personsToShow={personsToShow} persons={persons} handleDelete={deletePerson}/>
     </div>
   )
 }
