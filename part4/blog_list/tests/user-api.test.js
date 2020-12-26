@@ -20,7 +20,7 @@ beforeEach(async () => {
     await Promise.all(promiseArray)
 })
 
-describe('test the test_helper user functions', () =>{
+describe('adding users', () =>{
 
     test('initial users are created', async () => {
         const DBcontent = await api.get('/api/users')
@@ -64,9 +64,31 @@ describe('test the test_helper user functions', () =>{
             }) 
             .expect(401)
 
+            
+        await api.post('/api/users')
+            .send({
+                username: "aardvark",
+                name: "aardvark"
+                password:"0"
+            }) 
+            .expect(401)
+            
+        })
+        
+    test('user rules enforced', async () => {
+        
+        await api.post('/api/users')
+        .send({
+            name: "aardvark",
+            password: "default"
+        }) 
+        .expect(401)
+        
+            
         await api.post('/api/users')
             .send(helper.initialUsers[0])
             .expect(400)
+        
     })
 
 })

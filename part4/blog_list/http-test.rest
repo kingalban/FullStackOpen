@@ -7,15 +7,15 @@ POST  http://localhost:3003/api/blogs HTTP/1.1
 content-type: application/json
 
 {  
-    "title": "Go To Statement Considered Harmful",
-    "author": "Edsger W. Dijkstra",
-    "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    "title": "new title",
+    "author": "new author",
+    "url": "http.com",
     "likes": 5
 }
 
 ###
 
-DELETE http://localhost:3003/api/blogs/5fe726b21cc16c2fccd56cfa HTTP/1.1
+DELETE http://localhost:3003/api/blogs/5fe729454b6f821fac1e9321 HTTP/1.1
 
 ###
 
@@ -43,8 +43,8 @@ POST http://localhost:3003/api/users HTTP/1.1
 content-type: application/json
 
 {
-  "username": "user2",
-  "name": "alfred",
-  "password": "excalibur"
+  "username": "user1",
+  "name": "tomato",
+  "password": "changeme"
 }
 
