@@ -170,17 +170,62 @@ describe("sending to DB", () => {
 
 describe("deleting from DB",  () => {
 
-    test("succeed with code 204 if id is valid", async () => {
-        var DBcontent = await helper.blogsInDB()
-        const blogToDelete = DBcontent[0]
+    test("user can create and successfully delete blog", async () => {
+        const setupBlog = {
+            author: "Andrew Healey",
+            title: "not for long",
+            url: "lmgtfy.com",
+            likes: 0
+        }
+
+        const blogToDelete = (await api
+            .post("/api/blogs")
+            .set('Authorization', 'bearer ' + token)
+            .send(setupBlog)
+            .expect(200))
+            .body
         
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', 'bearer ' + token)
             .expect(204)
         
         DBcontent = await helper.blogsInDB()
 
         expect(DBcontent).not.toContain(blogToDelete)
+    })
+    
+    test("user can't delete another user's blog", async () => {
+        const setupBlog = {
+            author: "Andrew Healey",
+            title: "not for long",
+            url: "lmgtfy.com",
+            likes: 0
+        }
+
+        const blogToDelete = _.pick((await api
+            .post("/api/blogs")
+            .set('Authorization', 'bearer ' + token)
+            .send(setupBlog)
+            .expect(200))
+            .body,
+            _.keys(helper.initialBlogs[0]))
+            
+
+            
+        const tempToken = (await api.post('/api/login')
+            .send(helper.initialUsers[0]))
+            .body.token
+        
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', 'bearer ' + tempToken)
+            .expect(401)
+        
+        DBcontent = (await helper.blogsInDB())
+            .map(el => _.pick(el, _.keys(helper.initialBlogs[0])))
+
+        expect(DBcontent).toContainEqual(blogToDelete)
     })
 })
 

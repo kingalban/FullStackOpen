@@ -105,7 +105,6 @@ describe('adding users', () =>{
         }) 
         .expect(400)
         
-            
         await api.post('/api/users')
             .set('Authorization', 'bearer ' + token)
             .send(helper.initialUsers[0])
