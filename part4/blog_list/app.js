@@ -23,11 +23,14 @@ mongoose.connect(mongoUrl, {
 
 app.use(cors())
 
+
 app.use(express.json())
 
 if(config.NODE_ENV !== "test"){
     app.use(middleware.morgan)
 }
+
+app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs', blogsRouter)
 

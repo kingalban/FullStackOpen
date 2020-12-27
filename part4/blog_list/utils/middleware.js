@@ -9,12 +9,12 @@ morgan.token("printPOST", (req, res) => {
 })
 
 const unknownEndpoint = (request, response) => {
+    console.log(request.token)
     response.status(404).send({ error: 'unknown endpoint' })
 }
     
 const errorHandler = (error, request, response, next) => {
     logger.error(error.message)
-    console.log(error.message)
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
@@ -26,9 +26,21 @@ const errorHandler = (error, request, response, next) => {
     
     next(error)
 }
-  
+
+const tokenExtractor = (request, response, next) => {
+    const authorization = request.get('authorization')
+
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+        request.token = authorization.substring(7)
+        // console.log(request.token)
+    }
+
+    next()
+}
+
 module.exports = {
     morgan:  morgan(':method :url :status :res[content-length] - :response-time ms :printPOST' ),
     errorHandler,
-    unknownEndpoint
+    unknownEndpoint,
+    tokenExtractor
 }

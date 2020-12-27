@@ -9,7 +9,24 @@ const User = require('../models/user')
 
 const returnedKeys = ["username", "name"]   // the keys of the users returned from the api
 
+var token       // defined in the global scope 
+
+beforeAll(async () => {
+    const admin = new User({username: "admin"})
+
+    await admin.save()
+
+    token = (await api.post('/api/login')
+        .send({
+            username: "admin"
+        }))
+        .body.token
+
+    await User.deleteMany({})
+})
+
 beforeEach(async () => {
+
     await User.deleteMany({})
     
     const userObjects = helper.initialUsers
@@ -30,6 +47,7 @@ describe('adding users', () =>{
             .map(user => 
                 _.pick(user, returnedKeys)
             )
+
         const trimmedInitialUsers = helper.initialUsers
             .map(user => 
                 _.pick(user, returnedKeys)
@@ -47,6 +65,7 @@ describe('adding users', () =>{
         }
 
         const response = await api.post('/api/users')
+            .set('Authorization', 'bearer ' + token)
             .send(newUser)
             .expect(200)
 
@@ -58,6 +77,7 @@ describe('adding users', () =>{
     test('password rules enforced', async () => {
 
         await api.post('/api/users')
+            .set('Authorization', 'bearer ' + token)
             .send({
                 username: "aardvark",
                 name: "aardvark"
@@ -68,7 +88,7 @@ describe('adding users', () =>{
         await api.post('/api/users')
             .send({
                 username: "aardvark",
-                name: "aardvark"
+                name: "aardvark",
                 password:"0"
             }) 
             .expect(401)
@@ -78,14 +98,16 @@ describe('adding users', () =>{
     test('user rules enforced', async () => {
         
         await api.post('/api/users')
+        .set('Authorization', 'bearer ' + token)
         .send({
             name: "aardvark",
             password: "default"
         }) 
-        .expect(401)
+        .expect(400)
         
             
         await api.post('/api/users')
+            .set('Authorization', 'bearer ' + token)
             .send(helper.initialUsers[0])
             .expect(400)
         
@@ -93,6 +115,7 @@ describe('adding users', () =>{
 
 })
 
-afterAll( () => {
+afterAll( async () => {
+    await User.deleteMany({})
     mongoose.connection.close()
 })

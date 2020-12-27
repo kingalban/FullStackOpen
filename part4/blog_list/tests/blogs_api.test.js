@@ -6,6 +6,21 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+var token       // defined in the global scope 
+
+beforeAll(async () => {
+    const admin = new User({username: "admin"})
+
+    await admin.save()
+
+    token = (await api.post('/api/login')
+        .send({
+            username: "admin"
+        }))
+        .body.token
+})
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -17,6 +32,8 @@ beforeEach(async () => {
     
     await Promise.all(promiseArray)
 })
+
+
 
 describe("receiving from DB", () => {
 
@@ -52,6 +69,7 @@ describe("sending to DB", () => {
         }
 
         await api.post("/api/blogs")
+            .set('Authorization', 'bearer ' + token)
             .send(newBlog)
             .expect(200)
 
@@ -75,6 +93,7 @@ describe("sending to DB", () => {
         }
 
         await api.post("/api/blogs")
+            .set('Authorization', 'bearer ' + token)
             .send(newBlog)
             .expect(200)
             
@@ -91,6 +110,7 @@ describe("sending to DB", () => {
         }
 
         await api.post("/api/blogs")
+            .set('Authorization', 'bearer ' + token)
             .send(newBlog)
             .expect(400)
     })
@@ -102,6 +122,7 @@ describe("sending to DB", () => {
         }
 
         await api.post("/api/blogs")
+            .set('Authorization', 'bearer ' + token)
             .send(newBlog)
             .expect(400)
     })
@@ -153,7 +174,6 @@ describe("deleting from DB",  () => {
         var DBcontent = await helper.blogsInDB()
         const blogToDelete = DBcontent[0]
         
-        console.log(`/api/blogs/${blogToDelete.id}`)
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
             .expect(204)
@@ -164,6 +184,7 @@ describe("deleting from DB",  () => {
     })
 })
 
-afterAll( () => {
+afterAll( async () => {
+    await User.deleteMany({})
     mongoose.connection.close()
 })

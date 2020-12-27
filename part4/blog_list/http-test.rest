@@ -5,18 +5,18 @@ GET  http://localhost:3003/api/blogs HTTP/1.1
 
 POST  http://localhost:3003/api/blogs HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWQiOiI1ZmU3YTU1YzQ3MzY1MjRlY2NkNzUxYmQiLCJpYXQiOjE2MDkwMjA2NjJ9.O7Bcuu37YhP4rMmX5TEOKwQHd9rWGfnmygYLDDrtffo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWQiOiI1ZmU3YTU1YzQ3MzY1MjRlY2NkNzUxYmQiLCJpYXQiOjE2MDkwNjc4Mjd9.LCwCyOIEk316bo5COi-qy4JMsSvhwKBEeZeeHW_MNDQ
 
 {  
-    "title": "secure info",
-    "author": "secret agent",
+    "title": "new blog",
+    "author": "banana",
     "url": "http.com",
     "likes": 5
 }
 
 ###
 
-DELETE http://localhost:3003/api/blogs/5fe7a79578c5c028c02cef6d HTTP/1.1
+DELETE http://localhost:3003/api/blogs/5fe86d43bd345a04a8babf0f HTTP/1.1
 
 ###
 
