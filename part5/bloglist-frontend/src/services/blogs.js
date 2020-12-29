@@ -11,12 +11,10 @@ const update = async (id, newObject) => {
   return response.data
 }
 
-
 let token = null
 
 const setToken = newToken => {
     token = `bearer ${newToken}`
-    console.log("token updated:", token)
 }
 
 const create = async newObject => {
