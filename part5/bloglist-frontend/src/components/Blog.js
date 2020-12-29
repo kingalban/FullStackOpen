@@ -1,8 +1,14 @@
-import React, {useState} from 'react'
-import _ from 'lodash'
+import React, {useState} from "react"
+import PropTypes from "prop-types"
+import _ from "lodash"
 
-const Blog = ({ blog, updateBlog, blogs, setBlogs }) => {
+const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
     const [showBlog, setShowBlog] = useState(true)
+
+    let ownedByUser = false
+    if(user){
+        ownedByUser = user.username === blog.user.username
+    }
 
     const toggleShow = () => {
         setShowBlog(!showBlog)
@@ -10,47 +16,75 @@ const Blog = ({ blog, updateBlog, blogs, setBlogs }) => {
 
     const addLike = async () => {
         const updatedBlog = {...blog, likes: blog.likes+1}
-        const response = await updateBlog(blog.id, updatedBlog)
+        const response = await blogService.update(blog.id, updatedBlog)
 
         if(response) {
             setBlogs(
                 _.orderBy(blogs.map(b => {
-                        if(blog.id === b.id){
-                            return updatedBlog
-                        } else {
-                            return b
-                        }
-                    })
+                    if(blog.id === b.id){
+                        return updatedBlog
+                    } else {
+                        return b
+                    }
+                })
                 , ["likes"], ["desc"])
             )
         }
     }
 
+    const deleteBlog = async () => {
+        if(window.confirm(`Remove blog: ${blog.title} by ${blog.author}?`)){
+
+            const response = await blogService.remove(blog.id)
+
+            if(response){
+                setBlogs(
+                    blogs.filter(b => b.id !== blog.id)
+                )
+            }
+        }
+    }
+
     return ( 
         <div className="blogEntry">
-            {showBlog 
-            ? <div> 
+            {showBlog
+                ? <div>
                     {blog.title} {blog.author}{" "}
-                <button onClick={toggleShow}>
-                    view
-                </button> 
-            </div>
-            : <div> 
-                {blog.title}{" "}
-                <button onClick={toggleShow}>
-                    hide
-                </button> <br/>
-                <a href={blog.url}>{blog.url}</a> <br/>
-                {blog.likes}{" "}
-                <button onClick={addLike}>
+                    <button onClick={toggleShow}>
+                        view
+                    </button>
+                </div>
+                : <div>
+                    {blog.title}{" "}
+                    <button onClick={toggleShow}>
+                        hide
+                    </button> <br/>
+                    <a href={blog.url}>{blog.url}</a> <br/>
+                    {blog.likes}{" "}
+                    <button onClick={addLike}>
                     like
-                </button>  <br/>
-                {blog.author}
-            </div>
-                
+                    </button>  <br/>
+                    {blog.author} <br/>
+                    {ownedByUser
+                        ?<div>
+                            <button onClick={deleteBlog}>
+                                remove
+                            </button>
+                        </div>
+                        : <div>owned by {blog.user.name}</div>
+                    }
+                </div>
             }
         </div>
     )
+}
+
+Blog.propTypes = {
+    blog: PropTypes.object.isRequired,
+    blogService: PropTypes.object.isRequired,
+    blogs: PropTypes.array.isRequired,
+    setBlogs: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
 }
 
 export default Blog

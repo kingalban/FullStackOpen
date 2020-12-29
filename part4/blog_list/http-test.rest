@@ -15,8 +15,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZ
 
 ###
 DELETE http://localhost:3003/api/blogs/5fe8fd0469c7612ee8c2935e HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWQiOiI1ZmU3YTU1YzQ3MzY1MjRlY2NkNzUxYmQiLCJpYXQiOjE2MDkxMDQ2MDh9.PtyQe480Elp88wEz6LsKXs8ikDeljG5sxOSDaTiyu8A
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWQiOiI1ZmU3YTU1YzQ3MzY1MjRlY2NkNzUxYmQiLCJpYXQiOjE2MDkyNzU3OTB9.hc1mMiXnwjdUl5GwQYpA8-xpisE8sdDmriV7CaxtclU
 
 ###
 PUT http://localhost:3003/api/blogs/5fdfd2f43d0ec552c0f41d75 HTTP/1.1
@@ -39,11 +38,12 @@ GET http://localhost:3003/api/users HTTP/1.1
 
 ###
 POST http://localhost:3003/api/users HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWQiOiI1ZmU3YTU1YzQ3MzY1MjRlY2NkNzUxYmQiLCJpYXQiOjE2MDkyNzU3OTB9.hc1mMiXnwjdUl5GwQYpA8-xpisE8sdDmriV7CaxtclU
 content-type: application/json
 
 {
-  "username": "user1",
-  "name": "tomato",
+  "username": "user2",
+  "name": "potato",
   "password": "changeme"
 }
 
