@@ -14,7 +14,7 @@ const App = () => {
     const [messageType, setMessageType] = useState(null)
     
     const blogFormRef = React.createRef()
-   
+
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
         if (loggedUserJSON) {
@@ -82,7 +82,12 @@ const App = () => {
             <hr/>
             
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
+                <Blog 
+                    key={blog.id} 
+                    blog={blog} 
+                    updateBlog={blogService.update} 
+                    blogs={blogs}
+                    setBlogs={setBlogs}/>
                 )}
         </div>
     )
