@@ -37,6 +37,15 @@
     }
 }
 
+.blogEntry  {
+    border: solid;
+    padding-Top: 10px;
+    padding-Left: 2px;
+    border-Width: 1px;
+    margin-Bottom: 5px;
+}
+
+
 .message {
     color: green;
     background: lightgrey;
