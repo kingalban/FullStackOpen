@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import _ from 'lodash'
 import './App.css';
 import Blog from './components/Blog'
 import blogService from './services/blogs'
@@ -25,11 +26,16 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        blogService
-            .getAll()
-            .then(blogs =>
-                setBlogs( blogs )
-            )  
+        (async () => {
+            // blogService
+            //     .getAll()
+            //     .then(blogs =>
+            //         setBlogs( blogs )
+            //     )  
+            const retrievedblogs = await blogService
+                .getAll()
+            setBlogs(_.orderBy(retrievedblogs, ["likes"], ["desc"]))
+        })()
     }, [])
     
     const logout = () => {
@@ -38,10 +44,7 @@ const App = () => {
         setUser(null)
     }
 
-    const postMessage = ( message, messageType ) => {
-        console.log("message:", message)
-        console.log("messageType:", messageType)
-        
+    const postMessage = ( message, messageType ) => {        
         setMessage(message)
         setMessageType(messageType)
     
