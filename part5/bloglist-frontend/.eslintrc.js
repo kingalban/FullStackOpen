@@ -1,8 +1,8 @@
 module.exports = {
   "env": {
       "browser": true,
-      "es6": true
-      // "jest/globals": true 
+      "es6": true,
+      "jest/globals": true 
   },
   "extends": [ 
       "eslint:recommended",
@@ -20,7 +20,7 @@ module.exports = {
   ],
   "rules": {
       "indent": [
-          "error",
+          "warn",
           4
       ],
       "linebreak-style": [
@@ -28,11 +28,11 @@ module.exports = {
           "windows"
       ],
       "quotes": [
-          "error",
+          "warn",
           "double"
       ],
       "semi": [
-          "error",
+          "warn",
           "never"
       ],
       "eqeqeq": "error",

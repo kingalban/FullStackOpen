@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import _ from "lodash"
-import "./App.css";
+import "./App.css"
 import Blog from "./components/Blog"
 import blogService from "./services/blogs"
 import Notification from "./components/notification"
@@ -61,11 +61,11 @@ const App = () => {
 
             <Notification message={message} messageType={messageType}/>
 
-            {user === null 
+            {user === null
                 ?<Togglable buttonLabel="login">
-                    <LoginForm 
-                        setUser={setUser} 
-                        postMessage={postMessage} 
+                    <LoginForm
+                        setUser={setUser}
+                        postMessage={postMessage}
                         setToken={blogService.setToken}/>
                 </Togglable>
                 :<div>
@@ -87,10 +87,10 @@ const App = () => {
             <hr/>
 
             {blogs.map(blog =>
-                <Blog 
-                    key={blog.id} 
-                    blog={blog} 
-                    blogService={blogService} 
+                <Blog
+                    key={blog.id}
+                    blog={blog}
+                    blogService={blogService}
                     blogs={blogs}
                     setBlogs={setBlogs}
                     user={user}/>

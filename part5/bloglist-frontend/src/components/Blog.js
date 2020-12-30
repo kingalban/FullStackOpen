@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, { useState } from "react"
 import PropTypes from "prop-types"
 import _ from "lodash"
 
@@ -15,7 +15,7 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
     }
 
     const addLike = async () => {
-        const updatedBlog = {...blog, likes: blog.likes+1}
+        const updatedBlog = { ...blog, likes: blog.likes + 1 }
         const response = await blogService.update(blog.id, updatedBlog)
 
         if(response) {
@@ -45,29 +45,29 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
         }
     }
 
-    return ( 
+    return (
         <div className="blogEntry">
             {showBlog
                 ? <div>
                     {blog.title} {blog.author}{" "}
-                    <button onClick={toggleShow}>
+                    <button onClick={toggleShow} className="showButton">
                         view
                     </button>
                 </div>
                 : <div>
                     {blog.title}{" "}
-                    <button onClick={toggleShow}>
+                    <button onClick={toggleShow} className="hideButton">
                         hide
                     </button> <br/>
                     <a href={blog.url}>{blog.url}</a> <br/>
                     {blog.likes}{" "}
-                    <button onClick={addLike}>
+                    <button onClick={addLike} className="likeButton">
                     like
                     </button>  <br/>
                     {blog.author} <br/>
                     {ownedByUser
                         ?<div>
-                            <button onClick={deleteBlog}>
+                            <button onClick={deleteBlog} className="removeButton">
                                 remove
                             </button>
                         </div>
