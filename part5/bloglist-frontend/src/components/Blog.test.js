@@ -45,7 +45,7 @@ describe("blog component display", () => {
 
     test("shows all (title, author, url likes) when show clicked", () => {
 
-        const showButton = component.container.querySelector(".showButton")
+        const showButton = component.container.querySelector("#showButton")
 
         fireEvent.click(showButton)
 
@@ -57,11 +57,11 @@ describe("blog component display", () => {
 
     test("click 'like' calls function twice", () => {
 
-        const showButton = component.container.querySelector(".showButton")
+        const showButton = component.container.querySelector("#showButton")
 
         fireEvent.click(showButton)
 
-        const likeButton = component.container.querySelector(".likeButton")
+        const likeButton = component.container.querySelector("#likeButton")
 
         fireEvent.click(likeButton)
         fireEvent.click(likeButton)

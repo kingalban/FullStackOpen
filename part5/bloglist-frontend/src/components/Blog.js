@@ -50,24 +50,24 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
             {showBlog
                 ? <div>
                     {blog.title} {blog.author}{" "}
-                    <button onClick={toggleShow} className="showButton">
+                    <button onClick={toggleShow} id="showButton">
                         view
                     </button>
                 </div>
                 : <div>
                     {blog.title}{" "}
-                    <button onClick={toggleShow} className="hideButton">
+                    <button onClick={toggleShow} id="hideButton">
                         hide
                     </button> <br/>
                     <a href={blog.url}>{blog.url}</a> <br/>
                     {blog.likes}{" "}
-                    <button onClick={addLike} className="likeButton">
+                    <button onClick={addLike} id="likeButton">
                     like
                     </button>  <br/>
                     {blog.author} <br/>
                     {ownedByUser
                         ?<div>
-                            <button onClick={deleteBlog} className="removeButton">
+                            <button onClick={deleteBlog} id="removeButton">
                                 remove
                             </button>
                         </div>

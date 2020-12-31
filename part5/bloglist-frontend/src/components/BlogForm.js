@@ -26,7 +26,6 @@ const BlogForm = ({ blogs, setBlogs, createBlog, postMessage, blogFormRef, user 
             return(null)
         }
 
-        
         const blogObject = {
             title: newBlogTitle,
             author: newBlogAuthor,
@@ -80,7 +79,7 @@ const BlogForm = ({ blogs, setBlogs, createBlog, postMessage, blogFormRef, user 
                     onChange={handleURLChange}
                 />
             </div>
-            <button type="submit" className="submitButton">save</button>
+            <button type="submit" id="submitButton">save</button>
         </form>
     )
 }

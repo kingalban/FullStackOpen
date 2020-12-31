@@ -1,38 +1,38 @@
-import React, {useState} from 'react'
-import loginService from '../services/login' 
+import React, { useState } from "react"
+import loginService from "../services/login"
 
 const LoginForm = ({ setUser, postMessage, setToken }) => {
-    
-    const [username, setUsername] = useState('') 
-    const [password, setPassword] = useState('')
-    
+
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+
     const handleLogin = async (event) => {
         event.preventDefault()
         try {
             const user = await loginService.login({
                 username, password,
             })
-            
+
             window.localStorage.setItem(
-                'loggedBlogappUser', JSON.stringify(user)
-            ) 
-            
+                "loggedBlogappUser", JSON.stringify(user)
+            )
+
             setToken(user.token)
             setUser(user)
-            setUsername('')
-            setPassword('')
-                
-            } catch (exception) {
-                console.log(exception)
-                postMessage('credentials not accepted', 'error')
-            }
-            
-        
+            setUsername("")
+            setPassword("")
+
+        } catch (exception) {
+            console.log(exception)
+            postMessage("credentials not accepted", "error")
+        }
+
+
     }
-        
-    
+
+
     return(
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} id="login-form">
             <div>
                 username <input
                     type="text"
@@ -50,7 +50,7 @@ const LoginForm = ({ setUser, postMessage, setToken }) => {
                 />
             </div>
             <button type="submit">login</button>
-        </form>      
+        </form>
     )
 }
 

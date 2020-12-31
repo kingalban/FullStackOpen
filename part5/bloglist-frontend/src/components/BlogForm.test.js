@@ -33,7 +33,7 @@ describe("blog form function", () => {
         const authorField = component.container.querySelector("#author")
         const urlField = component.container.querySelector("#url")
 
-        const submitButton = component.container.querySelector(".submitButton")
+        const submitButton = component.container.querySelector("#submitButton")
 
         const blog = {
             title: "simple blog",

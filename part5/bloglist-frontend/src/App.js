@@ -62,12 +62,13 @@ const App = () => {
             <Notification message={message} messageType={messageType}/>
 
             {user === null
-                ?<Togglable buttonLabel="login">
-                    <LoginForm
-                        setUser={setUser}
-                        postMessage={postMessage}
-                        setToken={blogService.setToken}/>
-                </Togglable>
+                ?
+                // <Togglable buttonLabel="login">
+                <LoginForm
+                    setUser={setUser}
+                    postMessage={postMessage}
+                    setToken={blogService.setToken}/>
+                // </Togglable>
                 :<div>
                     <p>
                         {user.name} logged in <button onClick={logout}>logout</button>
