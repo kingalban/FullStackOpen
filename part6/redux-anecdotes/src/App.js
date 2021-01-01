@@ -7,9 +7,9 @@ const App = () => {
     return (
         <div>
         <h2>Anecdotes</h2>
-        <NewAnecdote />
-        <AnecdoteList />
         <Notification />
+        <AnecdoteList />
+        <NewAnecdote />
         </div>
     )
 }

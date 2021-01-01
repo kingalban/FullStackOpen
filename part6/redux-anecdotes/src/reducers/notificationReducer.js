@@ -1,21 +1,32 @@
 
-const initialNotification = "this is stored in REDUX"
-
-const reducer = (state = initialNotification, action) => {
+const reducer = (state = null, action) => {
     console.log('state now: ', state)
     console.log('action', action)
   
     switch(action.type) {
-      case "NOTIFY": 
-        return action.data
-      default: return state
+        case "NOTIFY": 
+            return action.data
+
+        case "UN_NOTIFY":
+            return null
+        
+        default: return state
     }
 }
 
-export const vote = (notification) => {
+export const setNotificaion = (notification) => {
+    console.log("NOTIFYING")
     return {
         type: "NOTIFY",
-        data: {notification}
+        data: notification
+    }
+}
+
+export const removeNotificaion = () => {
+    console.log("REMOVING NOTIFICATION")
+    return {
+        type: "UN_NOTIFY",
+        data: null
     }
 }
   
