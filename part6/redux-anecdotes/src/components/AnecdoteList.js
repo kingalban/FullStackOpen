@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { vote } from "../reducers/anecdoteReducer"
 
 const AnecdoteList = (propr) => {
-    const anecdotes = _.orderBy(useSelector(state => state), ["votes"], ["desc"])
+    const anecdotes = _.orderBy(useSelector(state => state.anecdotes), ["votes"], ["desc"])
     const dispatch = useDispatch()
 
     return (
