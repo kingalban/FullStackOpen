@@ -1,11 +1,12 @@
 import React from 'react'
+import _ from "lodash"
 import { useSelector, useDispatch } from 'react-redux'
 import { vote, createAnecdote} from "./reducers/anecdoteReducer"
 
 const App = () => {
-  const anecdotes = useSelector(state => state)
+  const anecdotes = _.orderBy(useSelector(state => state), ["votes"], ["desc"])
   const dispatch = useDispatch()
-
+  
   const addAnecdote = (event) => {
     event.preventDefault()
     const anecdote = event.target.anecdote.value
