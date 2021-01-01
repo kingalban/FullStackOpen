@@ -18,6 +18,8 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
         const updatedBlog = { ...blog, likes: blog.likes + 1 }
         const response = await blogService.update(blog.id, updatedBlog)
 
+        console.log("blog:", updatedBlog.title, "likes:", updatedBlog.likes)
+
         if(response) {
             setBlogs(
                 _.orderBy(blogs.map(b => {
@@ -46,32 +48,44 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
     }
 
     return (
-        <div className="blogEntry">
+        <div className="blog-entry">
             {showBlog
                 ? <div>
                     {blog.title} {blog.author}{" "}
-                    <button onClick={toggleShow} id="showButton">
+                    <button onClick={toggleShow} id="show-button">
                         view
                     </button>
                 </div>
                 : <div>
-                    {blog.title}{" "}
-                    <button onClick={toggleShow} id="hideButton">
-                        hide
-                    </button> <br/>
-                    <a href={blog.url}>{blog.url}</a> <br/>
-                    {blog.likes}{" "}
-                    <button onClick={addLike} id="likeButton">
-                    like
-                    </button>  <br/>
-                    {blog.author} <br/>
+                    <div id="blog-title">
+                        {blog.title}{" "}
+                        <button onClick={toggleShow} id="hide-button">
+                            hide
+                        </button> <br/>
+                    </div>
+
+                    <div id="blog-url">
+                        <a href={blog.url}>{blog.url}</a> <br/>
+                    </div>
+
+                    <div id="blog-likes">
+                        {blog.likes}{" "}
+                        <button onClick={addLike} id="like-button">
+                            like
+                        </button>  <br/>
+                    </div>
+
+                    <div id="blog-author">
+                        {blog.author} <br/>
+                    </div>
+
                     {ownedByUser
                         ?<div>
-                            <button onClick={deleteBlog} id="removeButton">
+                            <button onClick={deleteBlog} id="remove-button">
                                 remove
                             </button>
                         </div>
-                        : <div>owned by {blog.user.name}</div>
+                        : null
                     }
                 </div>
             }

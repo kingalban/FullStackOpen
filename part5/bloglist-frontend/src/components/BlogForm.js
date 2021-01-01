@@ -79,7 +79,7 @@ const BlogForm = ({ blogs, setBlogs, createBlog, postMessage, blogFormRef, user 
                     onChange={handleURLChange}
                 />
             </div>
-            <button type="submit" id="submitButton">save</button>
+            <button type="submit" id="submit-button">save</button>
         </form>
     )
 }

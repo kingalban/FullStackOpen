@@ -71,7 +71,7 @@ const App = () => {
                 // </Togglable>
                 :<div>
                     <p>
-                        {user.name} logged in <button onClick={logout}>logout</button>
+                        {user.name} logged in <button onClick={logout} id="logout-button">logout</button>
                     </p>
                     <Togglable buttonLabel="new entry" ref={blogFormRef}>
                         <BlogForm
