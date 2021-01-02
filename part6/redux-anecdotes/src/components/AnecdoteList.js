@@ -5,16 +5,22 @@ import { useSelector, useDispatch } from 'react-redux'
 import { vote } from "../reducers/anecdoteReducer"
 
 const AnecdoteList = (propr) => {
-    const filterText = useSelector(state => state.filter)
 
-    const anecdotes = _.chain(useSelector(state => state.anecdotes))
-        .orderBy(["votes"], ["desc"])
-        .filter(entry => entry.content.includes(filterText))
-        .value()
+    const anecdotes = useSelector(({anecdotes, filter}) => {
+        if(anecdotes.length){
+            return _.chain(anecdotes)
+                .orderBy(["votes"], ["desc"])
+                .filter(entry => filter
+                    ?entry.content.includes(filter)
+                    :entry)
+                .value()
+        }
+        return anecdotes
+    })
 
     const dispatch = useDispatch()
 
-    return (
+    return ( 
         anecdotes.map(anecdote =>
             <div key={anecdote.id}>
             <div>
