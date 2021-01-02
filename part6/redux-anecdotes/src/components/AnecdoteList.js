@@ -1,33 +1,19 @@
 
 import React from 'react'
 import _ from "lodash"
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { incrementVote } from "../reducers/anecdoteReducer"
 import { setNotificaion } from "../reducers/notificationReducer"
 
-const AnecdoteList = (propr) => {
-    console.log("anecdotes:", useSelector(state => state.anecdotes).length)
-    const dispatch = useDispatch()
-
-    const anecdotes = useSelector(({anecdotes, filter}) => {
-        if(anecdotes.length){
-            return _.chain(anecdotes)
-                .orderBy(["votes"], ["desc"])
-                .filter(entry => filter
-                    ?entry.content.includes(filter)
-                    :entry)
-                .value()
-        }
-        return anecdotes
-    })
+const AnecdoteList = (props) => {
 
     const voteHandler = anecdote => {
-        dispatch(setNotificaion(`you voted for ${anecdote.content}`, 2))
-        dispatch(incrementVote(anecdote))
+        props.setNotificaion(`you voted for ${anecdote.content}`, 2)
+        props.incrementVote(anecdote)
     }
 
     return ( 
-        anecdotes.map(anecdote =>
+        props.anecdotes.map(anecdote =>
             <div key={anecdote.id}>
             <div>
                 {anecdote.content}
@@ -41,4 +27,25 @@ const AnecdoteList = (propr) => {
     )
 }
 
-export default AnecdoteList
+const mapStateToProps = state => {
+    return  {
+        anecdotes: _.chain(state.anecdotes)
+            .orderBy(["votes"], ["desc"])
+            .filter(entry => state.filter
+                ? entry.content.includes(state.filter)
+                : true)
+            .value()
+        }
+}
+
+const mapDispatchToProps =  {
+    incrementVote,
+    setNotificaion
+}
+
+const ConnectedAnecdotes = connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(AnecdoteList)
+
+export default ConnectedAnecdotes
