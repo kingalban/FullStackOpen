@@ -3,6 +3,7 @@ import React from 'react'
 import _ from "lodash"
 import { useSelector, useDispatch } from 'react-redux'
 import { incrementVote } from "../reducers/anecdoteReducer"
+import { setNotificaion } from "../reducers/notificationReducer"
 
 const AnecdoteList = (propr) => {
     console.log("anecdotes:", useSelector(state => state.anecdotes).length)
@@ -21,6 +22,7 @@ const AnecdoteList = (propr) => {
     })
 
     const voteHandler = anecdote => {
+        dispatch(setNotificaion(`you voted for ${anecdote.content}`, 2))
         dispatch(incrementVote(anecdote))
     }
 

@@ -1,32 +1,25 @@
 
-const reducer = (state = null, action) => {
-    // console.log('state now: ', state)
-    // console.log('action', action)
-  
+const reducer = (state = null, action) => {  
     switch(action.type) {
         case "NOTIFY": 
             return action.data
-
-        case "UN_NOTIFY":
-            return null
         
         default: return state
     }
 }
 
-export const setNotificaion = (notification) => {
-    console.log("NOTIFYING")
-    return {
-        type: "NOTIFY",
-        data: notification
-    }
-}
+export const setNotificaion = (notification, seconds) => {
+    return dispatch => {
+        setTimeout(() => 
+        dispatch({
+            type: "NOTIFY",
+            data: null
+        }), seconds * 1000)
 
-export const removeNotificaion = () => {
-    console.log("REMOVING NOTIFICATION")
-    return {
-        type: "UN_NOTIFY",
-        data: null
+        dispatch({
+            type: "NOTIFY",
+            data: notification
+        })
     }
 }
   
