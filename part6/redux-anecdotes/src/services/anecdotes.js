@@ -8,9 +8,8 @@ const getAll = async () => {
 }
 
 const createNew = async (content) => {
-
     const response = await axios
-        .post(baseUrl,{
+        .post(baseUrl, {
             content: content,
             id: (100000 * Math.random()).toFixed(0),
             votes: 0
@@ -18,4 +17,9 @@ const createNew = async (content) => {
     return response.data
 }
 
-export default { getAll, createNew }
+const modify = async (object) => {
+    const response = await axios.put(`${baseUrl}/${object.id}`, object)
+    return response.data
+}
+
+export default { getAll, createNew, modify }

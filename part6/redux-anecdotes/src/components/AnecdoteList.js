@@ -2,9 +2,11 @@
 import React from 'react'
 import _ from "lodash"
 import { useSelector, useDispatch } from 'react-redux'
-import { vote } from "../reducers/anecdoteReducer"
+import { incrementVote } from "../reducers/anecdoteReducer"
 
 const AnecdoteList = (propr) => {
+    console.log("anecdotes:", useSelector(state => state.anecdotes).length)
+    const dispatch = useDispatch()
 
     const anecdotes = useSelector(({anecdotes, filter}) => {
         if(anecdotes.length){
@@ -18,7 +20,9 @@ const AnecdoteList = (propr) => {
         return anecdotes
     })
 
-    const dispatch = useDispatch()
+    const voteHandler = anecdote => {
+        dispatch(incrementVote(anecdote))
+    }
 
     return ( 
         anecdotes.map(anecdote =>
@@ -28,7 +32,7 @@ const AnecdoteList = (propr) => {
             </div>
             <div>
                 has {anecdote.votes}
-                <button onClick={() => dispatch(vote(anecdote.id))}>vote</button>
+                <button onClick={() => voteHandler(anecdote)}>vote</button>
             </div>
             </div>
         )
