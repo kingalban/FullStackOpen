@@ -1,24 +1,37 @@
+const emptyState = {
+    text: null,
+    timeiD: null
+}
 
-const reducer = (state = null, action) => {  
+const reducer = (state = emptyState, action) => {  
     switch(action.type) {
         case "NOTIFY": 
+            clearTimeout(state.timeID)
             return action.data
         
         default: return state
     }
 }
 
-export const setNotificaion = (notification, seconds) => {
+export const setNotificaion = (text, seconds) => {
     return dispatch => {
-        setTimeout(() => 
-        dispatch({
-            type: "NOTIFY",
-            data: null
-        }), seconds * 1000)
+        const timeID = setTimeout(() => 
+            dispatch({
+                type: "NOTIFY",
+                data: {
+                    text: null,
+                    timeID: null
+                }
+            }), 
+            seconds * 1000
+        )
 
         dispatch({
             type: "NOTIFY",
-            data: notification
+            data: {
+                text,
+                timeID
+            }
         })
     }
 }
