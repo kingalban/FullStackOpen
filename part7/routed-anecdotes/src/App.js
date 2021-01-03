@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from "react"
 import {
     BrowserRouter as Router,
-    Switch, Route, Link, useParams
+    Switch, Route, Link, 
+    useParams, useHistory
 } from "react-router-dom"
 
 const Menu = () => {
@@ -10,9 +11,9 @@ const Menu = () => {
     }
     return (
         <div>
-            <Link to='/' style={padding}>anecdotes</Link>
-            <Link to='/create-new' style={padding}>create new</Link>
-            <Link to='/about' style={padding}>about</Link>
+            <Link to="/" style={padding}>anecdotes</Link>
+            <Link to="/create-new" style={padding}>create new</Link>
+            <Link to="/about" style={padding}>about</Link>
         </div>
     )
 }
@@ -49,16 +50,17 @@ const About = () => (
 
 const Footer = () => (
     <div>
-        Anecdote app for <a href='https://courses.helsinki.fi/fi/tkt21009'>Full Stack -websovelluskehitys</a>.
+        Anecdote app for <a href="https://courses.helsinki.fi/fi/tkt21009">Full Stack -websovelluskehitys</a>.
 
-        See <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js</a> for the source code.
+        See <a href="https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js">https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js</a> for the source code.
     </div>
 )
 
 const CreateNew = (props) => {
-    const [content, setContent] = useState('')
-    const [author, setAuthor] = useState('')
-    const [info, setInfo] = useState('')
+    const history = useHistory()
+    const [content, setContent] = useState("")
+    const [author, setAuthor] = useState("")
+    const [info, setInfo] = useState("")
 
 
     const handleSubmit = (e) => {
@@ -69,29 +71,49 @@ const CreateNew = (props) => {
             info,
             votes: 0
         })
+        history.push("/")
     }
 
     return (
         <div>
-        <h2>create a new anecdote</h2>
-        <form onSubmit={handleSubmit}>
-            <div>
-            content
-            <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-            </div>
-            <div>
-            author
-            <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-            </div>
-            <div>
-            url for more info
-            <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-            </div>
-            <button>create</button>
-        </form>
+            <h2>create a new anecdote</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    content
+                    <input name="content" value={content} onChange={(e) => setContent(e.target.value)} />
+                </div>
+                <div>
+                    author
+                    <input name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
+                </div>
+                <div>
+                    url for more info
+                    <input name="info" value={info} onChange={(e)=> setInfo(e.target.value)} />
+                </div>
+                <button>create</button>
+            </form>
         </div>
     )
 
+}
+
+const Notification = ({ content }) => {
+    const style = {
+        border: "2px solid blue",
+        borderRadius: "5px",
+        padding: 5
+    }
+
+    console.log(content)
+
+    if(content) {
+        return(
+            <div style={style}>
+                {content}
+            </div>
+        )
+    }
+    return null
 }
 
 const Anecdote = ({ anecdotes }) => {
@@ -111,26 +133,28 @@ const App = () => {
     
     const [anecdotes, setAnecdotes] = useState([
         {
-            content: 'If it hurts, do it more often',
-            author: 'Jez Humble',
-            info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
+            content: "If it hurts, do it more often",
+            author: "Jez Humble",
+            info: "https://martinfowler.com/bliki/FrequencyReducesDifficulty.html",
             votes: 0,
-            id: '1'
+            id: "1"
         },
         {
-            content: 'Premature optimization is the root of all evil',
-            author: 'Donald Knuth',
-            info: 'http://wiki.c2.com/?PrematureOptimization',
+            content: "Premature optimization is the root of all evil",
+            author: "Donald Knuth",
+            info: "http://wiki.c2.com/?PrematureOptimization",
             votes: 0,
-            id: '2'
+            id: "2"
         }
     ])
 
-    const [notification, setNotification] = useState('')
+    const [notification, setNotification] = useState(null)
 
     const addNew = (anecdote) => {
         anecdote.id = (Math.random() * 10000).toFixed(0)
         setAnecdotes(anecdotes.concat(anecdote))
+        setNotification(<div>a new anecdote <i>${anecdote.content}</i> was created</div>)
+        setTimeout(() => setNotification(null), 10*1000)
     }
 
     const anecdoteById = (id) =>
@@ -140,8 +164,8 @@ const App = () => {
         const anecdote = anecdoteById(id)
 
         const voted = {
-        ...anecdote,
-        votes: anecdote.votes + 1
+            ...anecdote,
+            votes: anecdote.votes + 1
         }
 
         setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
@@ -152,6 +176,7 @@ const App = () => {
         <Router>
             <h1>Software anecdotes</h1>
             <Menu />
+            <Notification content={notification}/>
             <Switch>
                 <Route path="/about">
                     <About />
