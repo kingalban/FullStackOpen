@@ -1,6 +1,6 @@
 import React from "react"
 import loginService from "../services/login"
-import { login, logout } from "../reducers/userReducer"
+import { login } from "../reducers/userReducer"
 import { useDispatch, useSelector } from "react-redux"
 import { useField } from "../hooks/useField"
 import { postNotification } from "../reducers/notificationReducer"
@@ -57,11 +57,10 @@ const LoginForm = () => {
         )
     }
 
-    return (
-        <div>
-            {user.name} logged in <button onClick={() => dispatch(logout())} id="logout-button">logout</button>
-        </div>
-    )
+    return  null
+    // <div>
+    //     {user.name} logged in <button onClick={() => dispatch(logout())} id="logout-button">logout</button>
+    // </div>
 }
 
 export default LoginForm

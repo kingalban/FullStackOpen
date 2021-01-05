@@ -31,7 +31,7 @@ const BlogForm = ({ blogFormRef }) => {
         dispatch(create(blogObject))
 
         blogFormRef.current.toggleVisibility()
-        dispatch(postNotification(`Added new blog: ${newBlogTitle} by ${newBlogAuthor}`))
+        dispatch(postNotification(`Added new blog: ${newBlogTitle.value} by ${newBlogAuthor.value}`))
 
         clearTitle()
         clearAuthor()

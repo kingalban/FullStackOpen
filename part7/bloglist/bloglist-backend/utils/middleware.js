@@ -9,7 +9,6 @@ morgan.token("printPOST", (req, res) => {
 })
 
 const unknownEndpoint = (request, response) => {
-    console.log(request.token)
     response.status(404).send({ error: 'unknown endpoint' })
 }
     

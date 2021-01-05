@@ -8,6 +8,7 @@ import LoginForm from "./components/LoginForm"
 import UserList from "./components/UserList"
 import User from "./components/User"
 import BlogDetails from "./components/BlogDetails"
+import Navigation from "./components/Navigation"
 
 import { useDispatch, useSelector } from "react-redux"
 import { login } from "./reducers/userReducer"
@@ -40,6 +41,7 @@ const App = () => {
             <h2>blogs</h2>
 
             <Notification />
+            <Navigation />
             <LoginForm />
             <hr/>
             <Switch>
