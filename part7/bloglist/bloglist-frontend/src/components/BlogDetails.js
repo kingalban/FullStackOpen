@@ -31,26 +31,43 @@ const BlogDetails = () => {
         }
     }
 
+    const displayComments = (comment) => {
+        return (
+            <li key={comment.id}>{comment.comment}</li>
+        )
+    }
+
     return (
         <div>
-            <h2>{blog.title}</h2>
             <div>
-                <a href={blog.url}>{blog.url}</a>
-            </div>
-            <div id="blog-likes">
-                {blog.likes} likes {" "}
-                <button onClick={() => dispatch(addLike(blog))} id="like-button">
-                    like
-                </button>  <br/>
-            </div>
-            {ownedByUser
-                ? <div>
-                    <button onClick={deleteBlog} id="remove-button">
-                        remove
-                    </button>
+                <h2>{blog.title}</h2>
+                <div>
+                    <a href={blog.url}>{blog.url}</a>
                 </div>
-                : <p>added by {blog.user.name}</p>
-            }
+                <div id="blog-likes">
+                    {blog.likes} likes {" "}
+                    <button onClick={() => dispatch(addLike(blog))} id="like-button">
+                        like
+                    </button>  <br/>
+                </div>
+                {ownedByUser
+                    ? <div>
+                        <button onClick={deleteBlog} id="remove-button">
+                            remove
+                        </button>
+                    </div>
+                    : <p>added by {blog.user.name}</p>
+                }
+            </div>
+            <hr />
+            <div>
+                <h3>comments</h3>
+                <ul>
+                    {blog.comments.length
+                        ? blog.comments.map(comment => displayComments(comment))
+                        : <div>No comments yet</div>}
+                </ul>
+            </div>
         </div>
     )
 
