@@ -3,11 +3,16 @@ import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams, useHistory } from "react-router-dom"
 import _ from "lodash"
-import { remove, addLike } from "../reducers/blogReducer"
+import { remove, addLike, addComment } from "../reducers/blogReducer"
+import { useField } from "../hooks/useField"
 
 const BlogDetails = () => {
+
+    console.log("details rerendered")
     const dispatch = useDispatch()
     const history = useHistory()
+
+    const { clear: clearComment, ...newComment } = useField("text")
 
     const id = useParams().id
     const blogs = useSelector(state => state.blogs)
@@ -37,6 +42,17 @@ const BlogDetails = () => {
         )
     }
 
+    const submitComment = (event) => {
+        event.preventDefault()
+
+        if(newComment.value){
+            console.log(newComment.value)
+            dispatch(addComment(id, newComment.value))
+            clearComment()
+        }
+
+    }
+
     return (
         <div>
             <div>
@@ -59,9 +75,11 @@ const BlogDetails = () => {
                     : <p>added by {blog.user.name}</p>
                 }
             </div>
-            <hr />
             <div>
                 <h3>comments</h3>
+                <form onSubmit={submitComment}>
+                    <input id="comment" {...newComment}/>
+                </form>
                 <ul>
                     {blog.comments.length
                         ? blog.comments.map(comment => displayComments(comment))
