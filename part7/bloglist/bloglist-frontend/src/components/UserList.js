@@ -2,6 +2,16 @@ import React from "react"
 import { useSelector } from "react-redux"
 import _ from "lodash"
 import { Link } from "react-router-dom"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Paper,
+    TableHead,
+    Typography,
+} from '@material-ui/core'
 
 const UserList = () => {
 
@@ -21,34 +31,36 @@ const UserList = () => {
 
     const displayUser = (user) => {
         return (
-            <tr key={user.id}>
-                <th>
-                    <Link to={`${user.id}`}>
+            <TableRow key={user.id}>
+                <TableCell>
+                    <Link to={`/users/${user.id}`}>
                         {user.name}
                     </Link>
-                </th>
-                <th></th>
-                <th>{user.count}</th>
-            </tr>
+                </TableCell>
+                <TableCell>{user.count}</TableCell>
+            </TableRow>
         )
     }
 
     if(_.keys(userList).length) {
         return (
             <div>
-                <h2>Users</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th><h3>User</h3></th>
-                            <th>|</th>
-                            <th><h3>Blogs created</h3></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {userList.map(user => displayUser(user))}
-                    </tbody>
-                </table>
+                <Typography variant="h4" >
+                    Users
+                </Typography>
+                <TableContainer component={Paper}>
+                    <Table  size="small" aria-label="a dense table">
+                        <TableHead >
+                            <TableRow>
+                                <TableCell>user</TableCell>
+                                <TableCell>blogs created</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {userList.map(user => displayUser(user))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
         )
     }

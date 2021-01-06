@@ -9,6 +9,7 @@ import UserList from "./components/UserList"
 import User from "./components/User"
 import BlogDetails from "./components/BlogDetails"
 import Navigation from "./components/Navigation"
+import Container from "@material-ui/core/Container"
 
 import { useDispatch, useSelector } from "react-redux"
 import { login } from "./reducers/userReducer"
@@ -16,8 +17,18 @@ import { initBlogs } from "./reducers/blogReducer"
 
 import {
     BrowserRouter as Router,
-    Switch, Route,// Link
+    Switch, Route, Redirect
 } from "react-router-dom"
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Paper,
+    TableHead,
+} from "@material-ui/core"
 
 const App = () => {
 
@@ -36,41 +47,59 @@ const App = () => {
         dispatch(initBlogs())
     }, [dispatch])
 
+
+
     return (
-        <Router>
-            <h2>blogs</h2>
+        <Container>
+            <Router>
+                <h2>blogs</h2>
 
-            <Notification />
-            <Navigation />
-            <LoginForm />
-            <hr/>
-            <Switch>
-                <Route path="/users/:id">
-                    <User />
-                </Route>
-                <Route path="/users">
-                    <UserList />
-                </Route>
-                <Route path="/blog/:id">
-                    <BlogDetails />
-                </Route>
-                <Route path="/">
-                    {user === null
-                        ? null
-                        : <Togglable buttonLabel="new entry" ref={blogFormRef}>
-                            <BlogForm blogFormRef={blogFormRef} />
-                        </Togglable>
-                    }
+                <Notification />
+                <Navigation />
+                <hr/>
+                <Switch>
+                    <Route path="/users/:id">
+                        <User />
+                    </Route>
+                    <Route path="/users">
+                        <UserList />
+                    </Route>
+                    <Route path="/blog/:id">
+                        <BlogDetails />
+                    </Route>
+                    <Route path="/login" render={() =>
+                        user ? <Redirect to="/" /> : <LoginForm />}>
+                    </Route>
+                    <Route path="/">
+                        {user === null
+                            ? null
+                            : <Togglable buttonLabel="new entry" ref={blogFormRef}>
+                                <BlogForm blogFormRef={blogFormRef} />
+                            </Togglable>
+                        }
 
-                    {blogs.map(blog =>
-                        <Blog
-                            key={blog.id}
-                            blog={blog}
-                        />
-                    )}
-                </Route>
-            </Switch>
-        </Router>
+                        <TableContainer component={Paper}>
+                            <Table  size="small" aria-label="a dense table">
+                                <TableHead >
+                                    <TableRow>
+                                        <TableCell>blog</TableCell>
+                                        <TableCell>author</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {blogs.map(blog =>
+                                        <Blog
+                                            key={blog.id}
+                                            blog={blog}
+                                        />
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Route>
+                </Switch>
+            </Router>
+        </Container>
     )
 
 }

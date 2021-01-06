@@ -19,7 +19,7 @@ const reducer = (state = nullNotification, action) => {
     }
 }
 
-export const postNotification = (text, type = "message", time = 5) => {
+export const postNotification = (text, type = "success", time = 5) => {
     return async dispatch => {
         const timeID = setTimeout(() => {
             dispatch({ type: "CLEAR" })

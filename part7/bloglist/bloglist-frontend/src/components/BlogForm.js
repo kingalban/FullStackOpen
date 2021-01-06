@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { create } from "../reducers/blogReducer"
 import { postNotification } from "../reducers/notificationReducer"
 import { useField } from "../hooks/useField"
+import { TextField, Button, Box } from "@material-ui/core"
 
 const BlogForm = ({ blogFormRef }) => {
 
@@ -41,24 +42,31 @@ const BlogForm = ({ blogFormRef }) => {
     return(
         <form onSubmit={addBlog}>
             <div>
-            title: <input
-                    id='title'
+                <TextField 
+                    id="title"
+                    label="title"
                     {...newBlogTitle}
                 />
             </div>
             <div>
-            author: <input
-                    id='author'
+                <TextField 
+                    id="author"
+                    label="author"
                     {...newBlogAuthor}
                 />
             </div>
             <div>
-            url:<input
-                    id='url'
+                <TextField 
+                    id="url"
+                    label="url"
                     {...newBlogURL}
                 />
             </div>
-            <button type="submit" id="submit-button">save</button>
+            <Box p={1}>
+                <Button variant="contained" color="primary" type="submit" size="small">
+                    save
+                </Button>
+            </Box>
         </form>
     )
 }
