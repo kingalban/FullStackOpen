@@ -2,6 +2,7 @@ const { promises } = require('fs')
 const mongoose = require('mongoose')
 const Author = require("./models/author")
 const Book = require("./models/book")
+const User = require("./models/user")
 const _ = require("lodash")
 
 const MONGODB_URI = "mongodb+srv://phonebook-user:mango-mungo@fullstackopen-phonebook.qc7x0.mongodb.net/library?retryWrites=true&w=majority"
@@ -93,6 +94,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
 
     await Author.deleteMany({})
     await Book.deleteMany({})
+    await User.deleteMany({})
     
     const authorData = await Promise.all(
         authors.map(a => {
