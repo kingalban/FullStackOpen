@@ -4,6 +4,7 @@ const Author = require("./models/author")
 const Book = require("./models/book")
 const User = require("./models/user")
 const _ = require("lodash")
+const { updateOne } = require('./models/author')
 
 const MONGODB_URI = "mongodb+srv://phonebook-user:mango-mungo@fullstackopen-phonebook.qc7x0.mongodb.net/library?retryWrites=true&w=majority"
 
@@ -85,6 +86,17 @@ const books = [
     },
 ]
 
+const users = [
+    {
+        username: "steve",
+        favoriteGenre: "sci-fi"
+    },
+    {
+        username: "mark",
+        favoriteGenre: "refactoring"
+    }
+]
+
 mongoose.set('useCreateIndex', true)
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
     .then(() => console.log("connected"))
@@ -115,10 +127,17 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
             author: authorData.find(a => a.name === b.author)._id,
             genres: b.genres
         })
-        await book.save()
+        return book.save()
     })
 
+
     await Promise.all(bookPromises)
+   
+    await Promise.all(users.map( async u => {
+            const user = new User({ ...u })
+            return  user.save()
+        })
+    )
 
     console.log("done")
     

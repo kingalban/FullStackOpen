@@ -73,3 +73,17 @@ query Login {
     }
 }
 `
+
+export const BOOK_ADDED = gql`  
+subscription {    
+    bookAdded {      
+        title
+        author {
+            name
+            born
+        }    
+        published
+        genres
+    }  
+}  
+`

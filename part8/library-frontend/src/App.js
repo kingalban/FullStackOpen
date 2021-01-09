@@ -9,6 +9,7 @@ import SetBirthyear from "./components/SetBirthyear"
 import LoginForm from "./components/LoginForm"
 import Notify from "./components/Notify"
 import Recommended from "./components/Recommended"
+import SubscriptionNotification from "./components/SubscriptionNotification"
 
 const App = () => {
     
@@ -46,6 +47,8 @@ const App = () => {
             : <button onClick={() => setPage("login")}>login</button>
             }
             </div>
+
+            <SubscriptionNotification />
 
             <Notify
                 errorMessage={errorMessage}

@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken')
 const Author = require("./models/author")
 const Book = require("./models/book")
 const User = require("./models/user")
+const { PubSub } = require('apollo-server')
+
+const pubsub = new PubSub()
 
 const MONGODB_URI = "mongodb+srv://phonebook-user:mango-mungo@fullstackopen-phonebook.qc7x0.mongodb.net/library?retryWrites=true&w=majority"
 const JWT_SECRET = 'what-is-six-times-seven'
@@ -77,6 +80,10 @@ const typeDefs = gql`
             password: String!
         ): Token
     }
+
+    type Subscription {
+        bookAdded: Book!
+    }
 `
 
 const resolvers = {
@@ -109,18 +116,20 @@ const resolvers = {
     Mutation: {
         addBook: async (root, args, context) => {
 
+            console.log("new book:", args)
+
             if (!context.currentUser) {
                 throw new AuthenticationError("not authenticated")
             }
 
-            let authorResponse = await Author.find({name: args.author})
+            let authorResponse = ( await Author.find({name: args.author}) )[0]
             
-            if(!authorResponse.length) {
+            if(!authorResponse) {
                 author = new Author({
                     name: args.author
                 })
                 try {
-                    authorResponse = await author.save()                
+                    authorResponse = await author.save()
                 } catch  (error) {
                     throw new UserInputError(error.message, {
                       invalidArgs: args,
@@ -140,8 +149,14 @@ const resolvers = {
                   invalidArgs: args,
                 })
             }
+
+            const populatedBook = await Book.populate(bookResponse, "author") 
+            console.log("book", book)
+
+            pubsub.publish('BOOK_ADDED', { bookAdded: book })
             
-            return await Book.populate(bookResponse, "author") 
+
+            return populatedBook
         },
 
         editAuthor: async (root, args, context) => {
@@ -181,6 +196,7 @@ const resolvers = {
         login: async (root, args) => {
             const user = await User.findOne({ username: args.username })
 
+
             if ( !user || args.password !== 'secred' ) {
               throw new UserInputError("wrong credentials")
             }
@@ -192,8 +208,13 @@ const resolvers = {
         
             return { value: jwt.sign(userForToken, JWT_SECRET) }
           }
-    }
-
+    },
+    
+    Subscription: {
+        bookAdded: {
+            subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+        },
+    },
 }
 
 const server = new ApolloServer({
@@ -206,10 +227,10 @@ const server = new ApolloServer({
                 const decodedToken = jwt.verify(
                     auth.substring(7), JWT_SECRET
                 )
-   
+
                 const currentUser = await User
                     .findById(decodedToken.id)
-                    .populate('friends')
+                    // .populate('friends')
                 
                 return { currentUser }
             } catch {
@@ -220,6 +241,7 @@ const server = new ApolloServer({
     }  
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl  }) => {
     console.log(`Server ready at ${url}`)
+    console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })  
