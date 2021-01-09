@@ -83,10 +83,15 @@ const resolvers = {
     Query: {
         bookCount: () => Book.collection.countDocuments(),
         authorCount: () => Author.collection.countDocuments(),
-        allBooks: (root, args) => {
-            return Book
-                .find({genres: { $elemMatch: { $eq: args.genre} } })
+        allBooks: async (root, args) => {
+            const response = await Book
+                .find(
+                    args.genre 
+                    ? {genres: { $elemMatch: { $eq: args.genre} } }
+                    : {}
+                )   
                 .populate("author")
+            return response
         },
         allAuthors: () => Author.find({}),
         me: (root, args, context) => {
@@ -97,7 +102,6 @@ const resolvers = {
     Author: {
         bookCount: async (root) => {
             const bookList = await Book.find({author: root._id})
-            console.log("booklist:", bookList)
             return bookList.length
         },
     },    
@@ -106,7 +110,7 @@ const resolvers = {
         addBook: async (root, args, context) => {
 
             if (!context.currentUser) {
-            throw new AuthenticationError("not authenticated")
+                throw new AuthenticationError("not authenticated")
             }
 
             let authorResponse = await Author.find({name: args.author})
@@ -165,7 +169,6 @@ const resolvers = {
 
             try {
                 const response = await user.save()
-                console.log("user response:", response)
                 return response                
             } catch  (error) {
                 throw new UserInputError(error.message, {
@@ -177,7 +180,7 @@ const resolvers = {
 
         login: async (root, args) => {
             const user = await User.findOne({ username: args.username })
-        
+
             if ( !user || args.password !== 'secred' ) {
               throw new UserInputError("wrong credentials")
             }
@@ -199,15 +202,20 @@ const server = new ApolloServer({
     context: async ({ req }) => {
         const auth = req ? req.headers.authorization : null
         if (auth && auth.toLowerCase().startsWith('bearer ')) {
-            const decodedToken = jwt.verify(
-                auth.substring(7), JWT_SECRET
-            )
-        
-            const currentUser = await User
-                .findById(decodedToken.id)
-                .populate('friends')
-
-            return { currentUser }
+            try {
+                const decodedToken = jwt.verify(
+                    auth.substring(7), JWT_SECRET
+                )
+   
+                const currentUser = await User
+                    .findById(decodedToken.id)
+                    .populate('friends')
+                
+                return { currentUser }
+            } catch {
+                
+                return null
+            }
         }
     }  
 })

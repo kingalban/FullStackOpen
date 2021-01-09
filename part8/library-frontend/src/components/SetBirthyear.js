@@ -38,7 +38,7 @@ const SetBirthyear = (props) => {
 
     const authorEntry = (author) => {
         return (
-            <option value={author.name}>{author.name}</option>
+            <option key={author.name} value={author.name}>{author.name}</option>
         )
     }
 
