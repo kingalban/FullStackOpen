@@ -100,18 +100,22 @@ const resolvers = {
                 .populate("author")
             return response
         },
-        allAuthors: () => Author.find({}),
+        allAuthors: () => {
+                console.log("all authors")
+                return Author.find({})
+            },
         me: (root, args, context) => {
             return context.currentUser
         }
     },
 
-    Author: {
-        bookCount: async (root) => {
-            const bookList = await Book.find({author: root._id})
-            return bookList.length
-        },
-    },    
+    // Author: {
+    //     bookCount: async (root) => {
+    //         console.log("finding books for", root.name)
+    //         const bookList = await Book.find({author: root._id})
+    //         return bookList.length
+    //     },
+    // },    
 
     Mutation: {
         addBook: async (root, args, context) => {
@@ -126,7 +130,8 @@ const resolvers = {
             
             if(!authorResponse) {
                 author = new Author({
-                    name: args.author
+                    name: args.author,
+                    bookCount: 1
                 })
                 try {
                     authorResponse = await author.save()
@@ -135,7 +140,9 @@ const resolvers = {
                       invalidArgs: args,
                     })
                 }
-            } 
+            } else {
+                await Author.findByIdAndUpdate(authorResponse._id, {bookCount: authorResponse.bookCount + 1})
+            }
 
             const book = new Book({
                 ...args,

@@ -48,7 +48,8 @@ const App = () => {
             }
             </div>
 
-            <SubscriptionNotification />
+            <SubscriptionNotification 
+                notification={setErrorMessage}/>
 
             <Notify
                 errorMessage={errorMessage}

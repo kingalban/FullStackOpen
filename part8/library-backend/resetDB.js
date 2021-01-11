@@ -112,7 +112,8 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
         authors.map(a => {
             const author = new Author({
                 name: a.name,
-                born: a.born
+                born: a.born,
+                bookCount: books.filter(b => b.author === a.name).length
             })
 
             const resp = author.save()
