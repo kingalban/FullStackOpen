@@ -1,7 +1,7 @@
 
 interface BMIValues {
     height: number;
-    mass: number;
+    weight: number;
 }
   
 const parseBMIArguments = (args: Array<string>): BMIValues => {
@@ -11,7 +11,7 @@ const parseBMIArguments = (args: Array<string>): BMIValues => {
     if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
         return {
             height: Number(args[2]),
-            mass: Number(args[3])
+            weight: Number(args[3])
         };
     } else {
         throw new Error('Provided values were not numbers!');
@@ -20,9 +20,9 @@ const parseBMIArguments = (args: Array<string>): BMIValues => {
 
 
 
-const calculateBmi = (height: number, mass: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
 
-    const BMI: number = mass / (height/100)**2;
+    const BMI: number = weight / (height/100)**2;
 
     if (BMI < 15) {
         return "Very severely underweight";
@@ -45,8 +45,8 @@ const calculateBmi = (height: number, mass: number): string => {
 
 
 try {
-    const { height, mass } = parseBMIArguments(process.argv);
-    console.log(calculateBmi(height, mass));
+    const { height, weight } = parseBMIArguments(process.argv);
+    console.log(calculateBmi(height, weight));
 } catch (e) {
     console.log("error:", e.message);
 }
