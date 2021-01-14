@@ -1,4 +1,4 @@
-import { Gender, Patient } from "../types";
+import { Gender, Patient, Entry } from "../types";
 
 const isString = (str: string): str is string => {
     return typeof str === "string";
@@ -12,11 +12,24 @@ const isGender = (gender: any): gender is Gender => {
     return Object.values(Gender).includes(gender);
 };
 
+const isArray = (arr: any): arr is Array<any> => {
+    return arr instanceof Array;
+};
+
 const isSSN = (SSN: string): SSN is string => {
     return typeof SSN === "string" 
         && SSN.length >= 10 
         && SSN.slice(6,7) === "-"
         && !isNaN(Number(SSN.slice(0,6)));
+};
+
+const isEntry = (entry: any): entry is Entry => {
+    return !!entry.description
+        && isString(entry.description)
+        && !!entry.date
+        && isDate(entry.date)
+        && entry.information ? isString(entry.information) : true
+        && entry.diagnosisCode ? isString(entry.diagnosisCode) : true;
 };
 
 const parseName = (name: string): string => {
@@ -54,6 +67,13 @@ const parseGender = (gender: string): Gender => {
     return gender;
 };
 
+const parseEntries = (entries: any): Array<Entry> => {
+    if(!isArray(entries) || !entries.every(isEntry)) {
+        throw new Error("Incorrect or missing entries");    
+    }
+    return entries;
+};
+
 export const toNewPatient = (object: any): Patient => {
     return {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -62,6 +82,7 @@ export const toNewPatient = (object: any): Patient => {
         dateOfBirth: parseDateOfBirth(object.dateOfBirth),
         ssn: parseSSN(object.ssn),
         gender: parseGender(object.gender),
-        occupation: parseOccupation(object.occupation)
+        occupation: parseOccupation(object.occupation),
+        entries: object.entries ? parseEntries(object.entries) : [],
     };
 };

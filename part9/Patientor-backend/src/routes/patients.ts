@@ -1,11 +1,21 @@
 import express from "express";
-import { getAll, addPatient } from "../services/patients";
+import { getAll, addPatient, getPatient } from "../services/patients";
 
 const patientsRouter = express.Router();
 
 patientsRouter.get("/", (_req, res) => {
     const patients = getAll();
     res.json(patients);
+});
+
+patientsRouter.get("/:id", (req, res) => {
+    const id = req.params.id;
+    const patient = getPatient(id);
+    if(patient){
+        res.json(patient);
+    } else {
+        res.status(404).json({error: "patient not found"}).end();
+    }
 });
 
 patientsRouter.post("/", (req, res) => {
