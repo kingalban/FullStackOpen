@@ -1,20 +1,17 @@
 
-import patientsData from "../../data/patients.json";
-import { Patient, PatientNoSSN } from "../types";
-import { toNewPatient } from "../utils/parsing"
+import patients from "../../data/patients";
+import { Patient, PatientNoSSN, Entry } from "../types";
+import { toNewPatient, toNewEntry } from "../utils/parsing";
 
-
-const patients: Array<Patient> = patientsData.map(obj => {
-    const object = toNewPatient(obj);
-    return object;
-});
+let patientList: Array<Patient> = patients.map(toNewPatient);
   
+
 const newID = (): string => {
-    return String(patientsData.length + 1);
+    return String(patientList.length + 1);
 };
 
 export const getAll = (): PatientNoSSN[]  => {
-    return patients.map((p:Patient): PatientNoSSN => {
+    return patientList.map((p:Patient): PatientNoSSN => {
         return {
             id: p.id,
             name: p.name,
@@ -28,10 +25,24 @@ export const getAll = (): PatientNoSSN[]  => {
 
 export const addPatient = (newPatientData: Patient): PatientNoSSN => {
     const parsedPatient = toNewPatient({ ...newPatientData, id: newID()});
-    patients.concat(parsedPatient);
+    patientList.concat(parsedPatient);
     return parsedPatient;
 };
 
 export const getPatient = (id: string): Patient | undefined => {
-    return patients.find(p => p.id === id);
+    return patientList.find(p => p.id === id);
+};
+
+export const addPatientEntry = (patientID: string, newEntry: Entry): Entry => {
+    const entryID = (patientList.find(p => p.id === patientID)?.entries?.length || 0) + 1;
+    const parsedEntry = toNewEntry({ ...newEntry, id:entryID });
+
+    patientList = patientList.map((p: Patient) => 
+        p.id === patientID
+        ? { ...p, entries: p.entries
+            ? p.entries.concat(parsedEntry)
+            : [parsedEntry]}
+        : p
+        );
+    return parsedEntry;
 };
