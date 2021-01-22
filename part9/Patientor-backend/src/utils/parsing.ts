@@ -1,39 +1,5 @@
 import { Gender, Patient, Entry, HealthCheckRating } from "../types";
-
-const assertNever = (x: never): never => {
-    throw new Error("Unexpected error:" + JSON.stringify(x));
-}
-
-const isString = (str: string): str is string => {
-    return typeof str === "string";
-};
-
-const isDate = (date: string): date is string => {
-    return Boolean(Date.parse(date));
-};
-
-const isGender = (gender: any): gender is Gender => {
-    return Object.values(Gender).includes(gender);
-};
-
-const isArray = (arr: any): arr is Array<any> => {
-    return arr instanceof Array;
-};
-
-const isSSN = (SSN: string): SSN is string => {
-    return typeof SSN === "string" 
-        && SSN.length >= 10 
-        && SSN.slice(6,7) === "-"
-        && !isNaN(Number(SSN.slice(0,6)));
-};
-
-const isEntry = (entry: any): entry is Entry => {
-    return ["Hospital", "OccupationalHealthcare", "HealthCheck" ].includes(entry.type)
-};
-
-const isHealthCheckRating = (rating: any): rating is HealthCheckRating => {
-    return Object.values(HealthCheckRating).includes(rating);
-};
+import {assertNever, isArray, isDate, isEntry, isString, isSSN, isGender, isHealthCheckRating} from "./typeguards";
 
 const parseString = (str: string): string => {
     if(!str || !isString(str)) {
@@ -44,7 +10,7 @@ const parseString = (str: string): string => {
 
 const parseDate = (dateOfBirth: string): string => {
     if(!dateOfBirth || !isDate(dateOfBirth)) {
-        throw new Error("Incorrect or missing date of birth: " + dateOfBirth);
+        throw new Error("Incorrect or missing date: " + dateOfBirth);
     }
     return dateOfBirth;
 };
@@ -88,8 +54,8 @@ const parseDiagnosisCodes = (codes: any): Array<string> | undefined=> {
 };
 
 const parseHealthCheckRating = (rating: any): HealthCheckRating => {
-    if(!rating || isHealthCheckRating(rating)) {
-        throw new Error("Incorrect or missing health check rating: " + rating);
+    if(!rating || !isHealthCheckRating(rating)) {
+        throw new Error("Incorrect or missing health check rating: " + JSON.stringify(rating));
     }
     return rating;
 };
@@ -107,10 +73,9 @@ export const toNewPatient = (object: any): Patient => {
 };
 
 export const toNewEntry = (object: any): Entry => {
-
+    console.log("object:", object);
     const baseObject = {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        id: object.id,
+        id: parseString(object.id),
         type: isEntry(object) ? object.type : null,
         description: parseString(object.description),
         date: parseDate(object.date),
@@ -124,8 +89,8 @@ export const toNewEntry = (object: any): Entry => {
                 ...baseObject,
                 type: "Hospital",
                 discharge: {
-                    date: parseDate(object.discharge?.date),
-                    criteria: parseString(object.discharge?.criteria),
+                    date: parseDate(object.dischargeDate),
+                    criteria: parseString(object.dischargeCriteria),
                 }
             };
             
@@ -134,10 +99,10 @@ export const toNewEntry = (object: any): Entry => {
                 ...baseObject,
                 type: "OccupationalHealthcare",
                 employerName: parseString(object.employerName),
-                sickLeave: object.sickLeave
+                sickLeave:  object.sickLeaveStartDate || object.sickLeaveEndDate 
                     ? {
-                        startDate: parseString(object.sickLeave.startDate),
-                        endDate: parseString(object.sickLeave.endDate)
+                        startDate: parseDate(object.sickLeaveStartDate),
+                        endDate: parseDate(object.sickLeaveEndDate)
                     }
                     : undefined
             };
@@ -146,7 +111,7 @@ export const toNewEntry = (object: any): Entry => {
             return {
                 ...baseObject,
                 type: "HealthCheck",
-                healthCheckRating: parseHealthCheckRating(object.HealthCheckRating)
+                healthCheckRating: parseHealthCheckRating(object.healthCheckRating)
             };
     }
 

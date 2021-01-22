@@ -50,6 +50,13 @@ interface HealthCheckEntry extends BaseEntry {
 
 export type Entry = | HospitalEntry | OccupationalHealthcareEntry | HealthCheckEntry;
 
+export interface IncomingEntry extends Omit<Entry, "sickLeave" | "discharge"> {
+    dischargeDate: string;
+    dischargeCriteria: string;
+    sickLeaveStartDate: string;
+    sickLeaveEndDate: string;
+} 
+
 export interface Patient {
     id: string;
     name: string;
@@ -59,7 +66,6 @@ export interface Patient {
     occupation: string;
     entries?: Entry[];
 }
-
 
 export type PatientNoSSN = Omit<Patient, "ssn">;
 

@@ -35,8 +35,12 @@ export const getPatient = (id: string): Patient | undefined => {
 
 export const addPatientEntry = (patientID: string, newEntry: Entry): Entry => {
     const entryID = (patientList.find(p => p.id === patientID)?.entries?.length || 0) + 1;
-    const parsedEntry = toNewEntry({ ...newEntry, id:entryID });
-
+    const parsedEntry = toNewEntry({ 
+        ...newEntry, 
+        id: entryID.toString(), 
+        date: new Date()
+    });
+    
     patientList = patientList.map((p: Patient) => 
         p.id === patientID
         ? { ...p, entries: p.entries
